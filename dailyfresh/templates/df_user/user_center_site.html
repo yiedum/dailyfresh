@@ -1,0 +1,60 @@
+{% extends 'user_center_base.html' %}
+{% block right_part %}
+<script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$('#site').addClass('active');
+		if($('.site_con dd').html()==' （ 收） '){
+			$('.site_con dd').html('无')
+		}
+
+		$('#info_form').submit(function(event) {
+			if($('#shou').val()=='' || $('#addr').val()=='' || $('#phone').val()==''){
+				$('.error_info').show();
+				return false;
+			}
+			else{
+				return true;
+			}
+		});
+
+		$('.form_group input').focus(function(event) {
+			$('.error_info').hide()
+		});
+		
+	})
+</script>
+	<div class="right_content clearfix">
+			<h3 class="common_title2">收货地址</h3>
+			<div class="site_con">
+				<dl>
+					<dt>当前地址：</dt>
+					<dd>{{user.uaddress}} （{{user.ushou}} 收） {{user.uphone}}</dd>
+				</dl>					
+			</div>
+			<h3 class="common_title2">编辑地址</h3>
+			<div class="site_con">
+				<form method="post", action="/user/user_center_site/" id="info_form">
+					{% csrf_token %}
+					<div class="form_group">
+						<label>收件人：</label>
+						<input type="text" name="shou" value="{{user.ushou}}" id="shou">
+					</div>
+					<div class="form_group form_group2">
+						<label>详细地址：</label>
+						<textarea class="site_area" name="addr" id="addr">{{user.uaddress}}</textarea>
+					</div>
+					<div class="form_group">
+						<label>手机：</label>
+						<input type="text" name="phone" value="{{user.uphone}}" id="phone">
+					</div>
+					<div class="form_group">
+						<label class="error_info">请将收货地址填写完整</label>
+					</div>
+
+					<input type="submit" name="" value="提交" class="info_submit">
+				</form>
+			</div>
+	</div>
+</div>
+{% endblock right_part %}

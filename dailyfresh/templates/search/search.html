@@ -1,0 +1,73 @@
+{% extends 'goods_base.html' %}
+{% block body %}
+<script type="text/javascript" src="/static/js/list.js"></script>
+<script type="text/javascript">
+    $(function(){
+        document.title = '天天生鲜-搜索';
+        $.get('/cart_count/', function(data) {
+            $('#show_count').html(data.count_sum);
+        });
+    })
+</script>
+    <div class="navbar_con">
+        <div class="navbar clearfix">
+            <div class="subnav_con fl">
+                <h1>全部商品分类</h1> 
+                <span></span>           
+                <ul class="subnav">
+                    <li><a href="/list_1_1_1/" class="fruit">新鲜水果</a></li>
+                    <li><a href="/list_2_1_1/" class="seafood">海鲜水产</a></li>
+                    <li><a href="/list_3_1_1/" class="meet">猪牛羊肉</a></li>
+                    <li><a href="/list_4_1_1/" class="egg">禽类蛋品</a></li>
+                    <li><a href="/list_5_1_1/" class="vegetables">新鲜蔬菜</a></li>
+                    <li><a href="/list_6_1_1/" class="ice">速冻食品</a></li>
+                </ul>
+            </div>
+            <ul class="navlist fl">
+                <li><a href="/">首页</a></li>
+                <li class="interval">|</li>
+                <li><a href="#">手机生鲜</a></li>
+                <li class="interval">|</li>
+                <li><a href="#">抽奖</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main_wrap clearfix">
+        <div class="r_wrap fl clearfix" style="width:1176px;margin-top:30px;">
+            <ul class="goods_type_list clearfix">
+                {% for g in page %}
+                <li>
+                    <a href="/detail_{{g.object.id}}"><img src="/static/{{g.object.gpic}}"></a>
+                    <h4><a href="/detail_{{g.object.id}}">{{g.object.gtitle}}</a></h4>
+                    <div class="operate">
+                        <span class="prize">￥{{g.object.gprice}}</span>
+                        <span class="unit">{{g.object.gprice}}/{{g.object.gunit}}</span>
+                        <a href="javascript:;" class="add_goods" title="加入购物车"></a>
+                    </div>
+                    <div class="add_jump" style="background:url('/static/{{g.object.gpic}}') no-repeat;background-size:100% 100%"></div>
+                </li>
+                {% empty %}
+                    <p style="text-align:center;">臣妾找不到啊。。。。。。</p>
+                {% endfor %}
+            </ul>
+
+            <div class="pagenation">
+                {% if page.has_previous %}
+                <a href="?q={{query}}&amp;page={{page.previous_page_number}}"><上一页</a>
+                {% endif %}
+                {% for page_num in paginator.page_range %}
+                {% if page_num == pageid %}
+                <a class="active" href="?q={{query}}&amp;page={{page_num}}">{{page_num}}</a>
+                {% else %}
+                <a href="?q={{query}}&amp;page={{page_num}}">{{page_num}}</a>
+                {% endif %}
+                {% endfor %}
+                {% if page.has_next %}
+                <a href="?q={{query}}&amp;page={{page.next_page_number}}">下一页></a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+

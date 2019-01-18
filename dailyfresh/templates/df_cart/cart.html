@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block follow_head %}
+<script type="text/javascript" src="/static/js/cart.js"></script>
+	<div class="search_bar clearfix">
+		<a href="/" class="logo fl"><img src="/static/images/logo.png"></a>
+		<div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;购物车</div>
+		<div class="search_con fr" action="/search/">
+			<form action="/search/" method="get">
+				<input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+				<input type="submit" class="input_btn fr" name="" value="搜索">
+			</form>
+		</div>		
+	</div>
+	{% if goods|length == 0 %}
+	<div class="total_empty">
+		这里什么也没有，去 <a href="/"> 逛逛吧 </a> ^_^
+	</div>
+	{% else %}
+	<div class="total_count">全部商品<em>2</em>件</div>	
+	<ul class="cart_list_th clearfix">
+		<li class="col01">商品名称</li>
+		<li class="col02">商品单位</li>
+		<li class="col03">商品价格</li>
+		<li class="col04">数量</li>
+		<li class="col05">小计</li>
+		<li class="col06">操作</li>
+	</ul>
+	{% for g in goods %}
+	<ul class="cart_list_td clearfix" id="{{g.0.id}}">
+		<li class="col01"><input type="checkbox" name="" checked></li>
+		<li class="col02"><a href="/detail_{{g.0.id}}"><img src="/static/{{g.0.gpic}}"></a></li>
+		<li class="col03">
+			{{g.0.gtitle}}<br>
+			<em>{{g.0.gprice}}元/{{g.0.gunit}}</em><br>
+			库存：<span><b style="color:red">{{g.0.gstock}}</b></span>
+		</li>
+		<li class="col04">{{g.0.gunit}}</li>
+		<li class="col05">{{g.0.gprice}}元</li>
+		<li class="col06">
+			<div class="num_add">
+				<a href="javascript:;" class="add fl">+</a>
+				<input type="text" class="num_show fl" value="{{g.1}}">
+				<a href="javascript:;" class="minus fl">-</a>	
+			</div>
+		</li>
+		<li class="col07"></li>
+		<li class="col08"><a href="javascript:;">删除</a></li>
+	</ul>
+	{% endfor %}
+	<ul class="settlements">
+		<li class="col01"><input type="checkbox" name="" checked="" id="check_all"></li>
+		<li class="col02">全选</li>
+		<li class="col03">合计(不含运费)：<span>¥</span><em id="cost_ttl">42.60</em><br>共计<b id="count_ttl">2</b>件商品</li>
+		<li class="col04"><a href="javascript:;" id="settle">去结算</a></li>
+	</ul>
+	{% endif %}
+{% endblock follow_head %}

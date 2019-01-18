@@ -1,0 +1,74 @@
+{% extends 'user_center_base.html' %}
+{% block right_part %}
+<script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$('#order').addClass('active');
+		$('.col04').each(function() {
+			var count = parseInt($(this).prev().html());
+			var price = parseFloat($(this).siblings('.col02').children('em').html().split('元')[0]);
+			var cost = (count*100)*(price*100)/10000;
+			$(this).html(cost.toFixed(2)+'元');
+		});
+	})
+</script>
+	<div class="right_content clearfix">
+			<h3 class="common_title2">全部订单</h3>
+			{% for o in orders %}
+			<ul class="order_list_th w978 clearfix">
+				<li class="col01">{{o.0.odate}}</li>
+				<li class="col02">订单号：{{o.0.oid}}</li>
+				{% if o.0.ispay == 1 %}
+				<li class="col02 stress">已支付</li>	
+				{% else %}
+				<li class="col02 stress">未支付</li>
+				{% endif %}	
+			</ul>
+			<table class="order_list_table w980">
+				<tbody>
+					<tr>
+						<td width="55%">
+							{% for od in o.1 %}
+							<ul class="order_goods_list clearfix">					
+								<li class="col01">
+									<a href="/detail_{{od.0.id}}">
+										<img src="/static/{{od.0.gpic}}">
+									</a>
+								</li>
+								<li class="col02">{{od.0.gtitle}}<em>{{od.1}}元/{{od.0.gunit}}</em></li>	
+								<li class="col03">{{od.2}}</li>
+								<li class="col04"></li>	
+							</ul>
+							{% endfor %}
+						</td>
+						<td width="15%">{{o.0.ocost}}元</td>
+						{% if o.0.ispay == 1 %}
+						<td width="15%">已付款</td>
+						<td width="15%"><a href="#" class="oper_btn">查看物流</a></td>
+						{% else %}
+						<td width="15%">待付款</td>
+						<td width="15%"><a href="#" class="oper_btn">去付款</a></td>
+						{% endif %}
+					</tr>
+				</tbody>
+			</table>
+			{% endfor %}
+
+			<div class="pagenation">
+				{% if orders.has_previous %}
+				<a href="/user/user_center_order_{{orders.previous_page_number}}"><上一页</a>
+				{% endif %}
+				{% for pid in paginator.page_range %}
+				{% if pid == orders.number %}
+				<a href="/user/user_center_order_{{pid}}/" class="active">{{pid}}</a>
+				{% else %}
+				<a href="/user/user_center_order_{{pid}}/">{{pid}}</a>
+				{% endif %}
+				{% endfor %}
+				{% if orders.has_next %}
+				<a href="/user/user_center_order_{{orders.next_page_number}}">下一页></a>
+				{% endif %}
+			</div>
+	</div>
+</div>
+{% endblock right_part %}
